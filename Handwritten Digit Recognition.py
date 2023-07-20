@@ -28,7 +28,9 @@ print(loss)
 model.save('digits.model') #save as digits.model
 
 
-#CREATE your PNGs and name it as 1.png ~ 4.png.
+#For creating self-made test cases, generate PNG images and name them as '1.png' to '4.png'.
+#The code will loop through these PNGs.
+#If you only intend to train the model, please refrain from executing the code below.
 for x in range(1, 5):
     img = cv.imread(f'{x}.png')[:, :, 0]
     img = np.invert(np.array([img]))
