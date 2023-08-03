@@ -4,7 +4,7 @@ import time
 import os
 import random
 
-WIN_WIDTH = 600
+WIN_WIDTH = 500
 WIN_HEIGHT = 800
 
 BIRD1_file_path = "C:\\Coding2\\Machine-Learning-Projects(public)\\Flappy Bird AI\\imgs\\bird1.png"
@@ -14,7 +14,9 @@ PIPE_file_path = "C:\\Coding2\\Machine-Learning-Projects(public)\\Flappy Bird AI
 BASE_file_path = "C:\\Coding2\\Machine-Learning-Projects(public)\\Flappy Bird AI\\imgs\\base.png"
 BG_file_path = "C:\\Coding2\\Machine-Learning-Projects(public)\\Flappy Bird AI\\imgs\\bg.png"
 
-BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(BIRD1_file_path)), pygame.transform.scale2x(pygame.image.load(BIRD2_file_path)), pygame.transform.scale2x(pygame.image.load(BIRD3_file_path))]
+BIRD_IMGS = [pygame.transform.scale2x(pygame.image.load(BIRD1_file_path)), 
+             pygame.transform.scale2x(pygame.image.load(BIRD2_file_path)), 
+             pygame.transform.scale2x(pygame.image.load(BIRD3_file_path))]
 PIPE_IMG = pygame.transform.scale2x(pygame.image.load(PIPE_file_path))
 BASE_IMG = pygame.transform.scale2x(pygame.image.load(BASE_file_path))
 BG_IMG = pygame.transform.scale2x(pygame.image.load(BG_file_path))
@@ -36,14 +38,14 @@ class Bird:
         self.img = self.IMGS[0]
     
     def jump(self):
-        self.val = -10.5
+        self.vel = -10.5
         self.tick_count = 0
         self.height = self.y
     
     def move(self):
         self.tick_count += 1
 
-        d = self.val*self.tick_count + 1.5*self.tick_count**2
+        d = self.vel*self.tick_count + 1.5*self.tick_count**2
 
         if d >= 16 : d = 16
         if d < 0 : d -= 2
@@ -53,9 +55,9 @@ class Bird:
         if d < 0 or self.y < self.height + 50:
             if self.tilt < self.MAX_ROTATION:
                 self.tilt = self.MAX_ROTATION
-            else:
-                if self.tilt > -90:
-                    self.tilt -= self.ROT_VEL
+        else:
+            if self.tilt > -90:
+                self.tilt -= self.ROT_VEL
     
     def draw(self, win):
         self.img_count += 1
@@ -91,11 +93,14 @@ def draw_window(win, bird):
 def main():
     bird = Bird(200, 200)
     win = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
+    clock = pygame.time.Clock()
     run = True
     while run:
+        clock.tick(30)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+        bird.move()
         draw_window(win, bird)
     pygame.quit()
     quit()
